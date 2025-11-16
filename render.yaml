@@ -1,7 +1,7 @@
-﻿services:
+services:
   - type: web
     name: positive-main
     env: python
-    region: singapore
+    rootDir: positive-main
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
