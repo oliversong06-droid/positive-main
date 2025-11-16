@@ -1,0 +1,50 @@
+OK: Loaded cached model!
+AI 모델 로딩 성공!
+============================================================
+🚀 일기장 웹 서버 시작!
+📍 주소: http://localhost:8080
+📋 API 엔드포인트:
+   - POST /api/analyze          : 감정 분석 및 색상 추천
+   - POST /api/save-diary       : 일기 저장
+   - GET  /api/diaries          : 일기 목록 조회
+   - DELETE /api/diary/<id>     : 일기 삭제
+🤖 AI 모델 상태: 활성화
+============================================================
+ * Serving Flask app 'app'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.0.93:8080
+[33mPress CTRL+C to quit[0m
+127.0.0.1 - - [16/Nov/2025 18:51:10] "GET /api/diaries HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:51:20] "GET /api/diaries HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:51:23] "GET /?id=6a36cf5a-490a-442c-b564-bba23a725fe2&vscodeBrowserReqId=1763286683945 HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:51:23] "GET /api/diaries HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:51:36] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:51:36] "GET /api/diaries HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:51:36] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+127.0.0.1 - - [16/Nov/2025 18:51:40] "[33mPOST /api/delete-diary HTTP/1.1[0m" 404 -
+127.0.0.1 - - [16/Nov/2025 18:51:42] "[33mPOST /api/delete-diary HTTP/1.1[0m" 404 -
+127.0.0.1 - - [16/Nov/2025 18:51:48] "POST /api/save-diary HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:51:49] "GET /api/diaries HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:51:51] "[33mPOST /api/delete-diary HTTP/1.1[0m" 404 -
+127.0.0.1 - - [16/Nov/2025 18:52:10] "POST /api/save-diary HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:52:10] "GET /api/diaries HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:52:14] "[33mGET /read-diary?id=1763286730824 HTTP/1.1[0m" 404 -
+127.0.0.1 - - [16/Nov/2025 18:53:12] "DELETE /api/diary/1763286336421 HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:53:35] "POST /api/analyze HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:54:53] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:54:53] "GET /api/diaries HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:54:54] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:54:54] "GET /api/diaries HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:54:54] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:54:54] "GET /api/diaries HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:54:56] "[33mPOST /api/delete-diary HTTP/1.1[0m" 404 -
+127.0.0.1 - - [16/Nov/2025 18:59:24] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:59:24] "GET /api/diaries HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:59:27] "[33mPOST /api/delete-diary HTTP/1.1[0m" 404 -
+127.0.0.1 - - [16/Nov/2025 18:59:29] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:59:29] "GET /api/diaries HTTP/1.1" 200 -
+127.0.0.1 - - [16/Nov/2025 18:59:30] "[33mGET /read-diary?id=1763286730824 HTTP/1.1[0m" 404 -
+127.0.0.1 - - [16/Nov/2025 18:59:34] "[33mPOST /api/delete-diary HTTP/1.1[0m" 404 -

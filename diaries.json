@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1763302729369,
+    "date": "2025-11-16",
+    "title": "My nice day. ",
+    "content": "Today, I got sick. Sick a lot, didn't feel good.",
+    "emotion": "",
+    "color_hex": "#667eea",
+    "color_name": "파란색",
+    "tone": "",
+    "created_at": "2025-11-16 23:18:49"
+  },
+  {
+    "id": 1763303986470,
+    "date": "2025-11-16",
+    "title": "My nice day. ",
+    "content": "I feel good and happy.",
+    "emotion": "",
+    "color_hex": "#667eea",
+    "color_name": "파란색",
+    "tone": "",
+    "created_at": "2025-11-16 23:39:46"
+  }
+]

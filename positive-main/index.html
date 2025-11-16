@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 일기장</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📔 나의 일기장</h1>
+            <p class="subtitle">당신의 이야기를 기록하세요</p>
+        </header>
+
+        <div class="main-content">
+            <!-- 좌측: 일기 작성 폼 -->
+            <section class="write-section">
+                <h2>새 일기 작성</h2>
+                <form id="diaryForm">
+                    <div class="form-group">
+                        <label for="diaryDate">날짜:</label>
+                        <input type="date" id="diaryDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="diaryTitle">제목:</label>
+                        <input type="text" id="diaryTitle" placeholder="오늘의 제목을 입력하세요" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="diaryContent">내용:</label>
+                        <textarea id="diaryContent" placeholder="오늘의 생각과 느낌을 자유롭게 작성하세요..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="diaryMood">기분:</label>
+                        <select id="diaryMood" required>
+                            <option value="">기분을 선택하세요</option>
+                            <option value="😊">😊 행복</option>
+                            <option value="😔">😔 슬픔</option>
+                            <option value="😠">😠 화남</option>
+                            <option value="😟">😟 걱정</option>
+                            <option value="😴">😴 피로</option>
+                            <option value="😌">😌 차분</option>
+                            <option value="🤩">🤩 감동</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-save">저장하기</button>
+                </form>
+            </section>
+
+            <!-- 우측: 일기 목록 -->
+            <section class="list-section">
+                <h2>일기 목록</h2>
+                <div class="filter-controls">
+                    <input type="text" id="searchInput" placeholder="일기 검색...">
+                    <button id="sortBtn" class="btn-sort">최신순</button>
+                </div>
+                <div id="diaryList" class="diary-list">
+                    <p class="empty-message">아직 작성한 일기가 없습니다.</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- 일기 상세보기 모달 -->
+        <div id="detailModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="detailContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

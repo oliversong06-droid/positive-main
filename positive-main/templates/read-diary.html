@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>일기 읽기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .header {
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            background: #f0f0f0;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            min-height: calc(100vh - 80px);
+        }
+
+        .diary-view {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .diary-view.themed {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .diary-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .diary-title {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .diary-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 1em;
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        .diary-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .emotion-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: white;
+            background: var(--emotion-color, #667eea);
+            margin-top: 10px;
+        }
+
+        .diary-content {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: rgba(0, 0, 0, 0.8);
+            flex-grow: 1;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .related-diaries {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .related-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #333;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .related-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+        }
+
+        .related-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+            background: #f9f9f9;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .related-item:hover {
+            background: #f0f0f0;
+            transform: translateX(5px);
+        }
+
+        .related-item-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .related-item-date {
+            font-size: 0.85em;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        .related-item-preview {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #999;
+            padding: 40px 20px;
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 1200px) {
+            .content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .diary-view {
+                padding: 30px;
+            }
+
+            .diary-title {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="goBack()">← 돌아가기</button>
+
+    <div class="header">
+        <h1>📖 일기 읽기</h1>
+    </div>
+
+    <div class="content">
+        <!-- 왼쪽: 선택한 일기 -->
+        <div id="mainDiary" class="diary-view themed">
+            <div class="empty-message">로딩 중...</div>
+        </div>
+
+        <!-- 오른쪽: 같은 감정의 다른 일기들 -->
+        <div class="related-diaries">
+            <div class="related-title">😊 같은 감정의 다른 일기</div>
+            <div id="relatedDiaries" class="related-list">
+                <div class="empty-message">로딩 중...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentDiary = null;
+        let allDiaries = [];
+
+        // 페이지 로드
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const diaryId = parseInt(params.get('id'));
+
+            if (!diaryId) {
+                alert('유효하지 않은 일기입니다.');
+                goBack();
+                return;
+            }
+
+            loadDiary(diaryId);
+        });
+
+        // 색상 반전 함수
+        function invertColor(hexColor) {
+            // #RRGGBB 형식의 HEX 색상을 받아서 반전시킴
+            const hex = hexColor.replace('#', '');
+            const r = 255 - parseInt(hex.substring(0, 2), 16);
+            const g = 255 - parseInt(hex.substring(2, 4), 16);
+            const b = 255 - parseInt(hex.substring(4, 6), 16);
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        // 색상 밝기 판단
+        function isLightColor(hexColor) {
+            const hex = hexColor.replace('#', '');
+            const r = parseInt(hex.substring(0, 2), 16);
+            const g = parseInt(hex.substring(2, 4), 16);
+            const b = parseInt(hex.substring(4, 6), 16);
+            const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+            return luminance > 0.5;
+        }
+
+        // 일기 로드
+        function loadDiary(diaryId) {
+            fetch('/api/diaries')
+                .then(response => response.json())
+                .then(diaries => {
+                    allDiaries = diaries;
+                    currentDiary = diaries.find(d => d.id === diaryId);
+
+                    if (!currentDiary) {
+                        alert('일기를 찾을 수 없습니다.');
+                        goBack();
+                        return;
+                    }
+
+                    renderMainDiary();
+                    renderRelatedDiaries();
+                })
+                .catch(error => {
+                    console.error('오류:', error);
+                    alert('일기를 불러올 수 없습니다.');
+                    goBack();
+                });
+        }
+
+        // 메인 일기 렌더링
+        function renderMainDiary() {
+            const bgColor = currentDiary.color_hex || '#667eea';
+            const textColor = isLightColor(bgColor) ? '#000000' : '#FFFFFF';
+
+            const mainDiaryEl = document.getElementById('mainDiary');
+            mainDiaryEl.style.backgroundColor = bgColor;
+            mainDiaryEl.style.color = textColor;
+
+            mainDiaryEl.innerHTML = `
+                <div class="diary-header">
+                    <div class="diary-title">${currentDiary.title}</div>
+                    <div class="diary-meta">
+                        <div class="diary-meta-item">📅 ${currentDiary.date}</div>
+                        ${currentDiary.emotion ? `<div class="diary-meta-item">💭 ${currentDiary.emotion}</div>` : ''}
+                    </div>
+                </div>
+                <div class="diary-content">${escapeHtml(currentDiary.content)}</div>
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid ${textColor}40;">
+                    <small style="opacity: 0.7;">작성: ${currentDiary.created_at}</small>
+                </div>
+            `;
+        }
+
+        // 관련 일기 렌더링
+        function renderRelatedDiaries() {
+            const emotion = currentDiary.emotion;
+            const relatedDiariesEl = document.getElementById('relatedDiaries');
+
+            if (!emotion) {
+                relatedDiariesEl.innerHTML = '<div class="empty-message">같은 감정의 일기가 없습니다.</div>';
+                return;
+            }
+
+            const relatedList = allDiaries.filter(d => 
+                d.emotion === emotion && d.id !== currentDiary.id
+            );
+
+            if (relatedList.length === 0) {
+                relatedDiariesEl.innerHTML = '<div class="empty-message">같은 감정의 다른 일기가 없습니다.</div>';
+                return;
+            }
+
+            relatedDiariesEl.innerHTML = relatedList.map(diary => `
+                <div class="related-item" onclick="changeDiary(${diary.id})" style="border-left-color: ${diary.color_hex}">
+                    <div class="related-item-title">${diary.title}</div>
+                    <div class="related-item-date">📅 ${diary.date}</div>
+                    <div class="related-item-preview">${diary.content.substring(0, 80)}...</div>
+                </div>
+            `).join('');
+        }
+
+        // 일기 변경
+        function changeDiary(diaryId) {
+            currentDiary = allDiaries.find(d => d.id === diaryId);
+            renderMainDiary();
+            renderRelatedDiaries();
+            window.history.replaceState(null, null, `?id=${diaryId}`);
+        }
+
+        // HTML 이스케이프
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // 뒤로가기
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

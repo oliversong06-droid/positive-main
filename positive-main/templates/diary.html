@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>일기 상세</title>
+    <link rel="stylesheet" href="/static/diary.css">
+</head>
+<body>
+    <div class="diary-container">
+        <header class="diary-header">
+            <a href="/" class="back-button">← 뒤로가기</a>
+            <div class="diary-meta">
+                <span id="diaryDate"></span>
+                <span id="diaryEmotion"></span>
+            </div>
+        </header>
+
+        <main class="diary-content">
+            <div class="diary-title" id="diaryTitle"></div>
+            <div class="diary-text" id="diaryText"></div>
+        </main>
+
+        <footer class="diary-footer">
+            <div class="diary-info">
+                <span id="diaryMood"></span>
+                <span id="diaryColor"></span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="/static/diary.js"></script>
+    <script>
+        // URL에서 diary_id 가져오기
+        const diaryId = window.location.pathname.split('/').pop();
+        diaryApp.loadDiary(diaryId);
+    </script>
+</body>
+</html>
